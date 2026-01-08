@@ -5,7 +5,7 @@ const TARGETS = {
         accComplaints: { value: 0, type: 'exact', label: 'Substantiated ACC Complaints' },
         phishingClicks: { value: 0, type: 'exact', label: 'Phishing Email Clicks' },
         redFlags: { value: 0, type: 'exact', label: 'Red Flag Events' },
-        depositWaiver: { value: 100, type: 'exact', label: 'Deposit Waiver Accuracy' }
+        depositWaiver: { value: 0, type: 'exact', label: 'Deposit Waiver Accuracy Infractions' }
     },
     drivers: {
         scheduleAdherence: { value: 93, type: 'min', label: 'Schedule Adherence' },
