@@ -1,0 +1,29 @@
+name = "apsyearendreviews"
+type = "javascript"
+account_id = ""
+workers_dev = true
+route = ""
+zone_id = ""
+
+[env.production]
+name = "apsyearendreviews-prod"
+route = "reviews.ourknight.family/*"
+zone_id = ""
+
+[build]
+command = ""
+cwd = "./"
+watch_paths = []
+
+[build.upload]
+format = "service-worker"
+
+[[build.upload.rules]]
+type = "CompiledContentType"
+globs = ["**/*.js"]
+fallthrough = true
+
+[[build.upload.rules]]
+type = "Text"
+globs = ["**/*.html", "**/*.css"]
+fallthrough = true
