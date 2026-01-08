@@ -193,87 +193,118 @@ function displayResults(analysis) {
 function generateAIReview(metrics, analysis) {
     const { name, pronouns, customHighlights } = metrics;
     const [subjective, objective, possessive] = getPronounForms(pronouns);
-    const firstName = name.trim().split(' ')[0]; // Extract first name only
+    const firstName = name.trim().split(' ')[0];
     
-    // Build review paragraph
-    let review = `Throughout this performance period, ${firstName} has demonstrated `;
+    const perfRatio = analysis.strengths.length / (analysis.strengths.length + analysis.improvements.length || 1);
     
-    if (analysis.strengths.length > analysis.improvements.length) {
-        review += `truly exceptional performance that consistently exceeds organizational expectations and sets a high standard for ${possessive} peers. `;
-    } else if (analysis.strengths.length === analysis.improvements.length) {
-        review += `commendable performance with a well-balanced profile of notable achievements alongside meaningful opportunities for continued professional growth and development. `;
-    } else {
-        review += `performance that reflects genuine potential and dedication, with several key areas identified for focused development that will enhance ${possessive} overall contribution to the team. `;
-    }
+    // Varied opening statements
+    const openings = {
+        exceptional: [
+            `Throughout this review period, ${firstName} has demonstrated truly outstanding performance that consistently surpasses expectations and elevates team standards. `,
+            `${firstName}'s performance over the past year has been nothing short of exceptional, with consistent excellence across multiple critical dimensions. `,
+            `This year, ${firstName} has set themselves apart through consistently exceptional performance and unwavering commitment to organizational goals. `,
+        ],
+        strong: [
+            `${firstName} has delivered solid performance throughout this review period, with meaningful accomplishments balanced by opportunities for continued growth. `,
+            `This past year reflects ${firstName}'s capable approach to ${possessive} role, with notable strengths alongside areas for development. `,
+            `${firstName} has shown competent and reliable performance, demonstrating both substantive contributions and potential for expanded impact. `,
+        ],
+        developing: [
+            `During this review period, ${firstName} has shown genuine effort and dedication, with clear potential for growth in key performance areas. `,
+            `${firstName}'s performance reflects a developing professional with meaningful contributions and important opportunities for skill enhancement. `,
+            `This year has presented valuable learning opportunities for ${firstName}, with several areas identified for focused professional development. `,
+        ]
+    };
     
-    // Highlight key strengths and major wins
+    let category = perfRatio > 0.6 ? 'exceptional' : perfRatio > 0.35 ? 'strong' : 'developing';
+    let review = openings[category][Math.floor(Math.random() * openings[category].length)];
+    
+    // Varied strength sections
     if (analysis.strengths.length > 0) {
-        review += `${subjective.charAt(0).toUpperCase() + subjective.slice(1)} has demonstrated remarkable excellence across multiple performance dimensions. Notably, ${subjective} has achieved outstanding results in `;
+        const strengthVariations = [
+            `${subjective.charAt(0).toUpperCase() + subjective.slice(1)} has demonstrated remarkable proficiency in ${analysis.strengths.length > 1 ? 'several key areas' : 'a critical performance area'}, `,
+            `Notable achievements include demonstrated excellence in ${analysis.strengths.length > 1 ? 'multiple dimensions' : 'a key performance indicator'}, specifically `,
+            `${firstName}'s most impressive contributions are evident in ${analysis.strengths.length > 1 ? 'the breadth of strong performance across' : ''} `,
+        ];
         
-        const topStrengths = analysis.strengths.slice(0, 3).map(s => {
-            const metricName = s.split(':')[0].toLowerCase();
-            return metricName;
-        });
+        review += strengthVariations[Math.floor(Math.random() * strengthVariations.length)];
+        
+        const topStrengths = analysis.strengths.slice(0, 3).map(s => s.split(':')[0].toLowerCase());
         
         if (topStrengths.length === 1) {
-            review += `${topStrengths[0]}, which represents a significant accomplishment. `;
+            review += `${topStrengths[0]}, which represents significant professional achievement. `;
         } else if (topStrengths.length === 2) {
-            review += `${topStrengths[0]} and ${topStrengths[1]}, both of which showcase ${possessive} commitment to excellence. `;
+            review += `${topStrengths[0]} and ${topStrengths[1]}, demonstrating sustained excellence. `;
         } else {
-            review += `${topStrengths.slice(0, -1).join(', ')}, and ${topStrengths[topStrengths.length - 1]}, all of which represent major wins for both ${objective} and the organization. `;
-        }
-        
-        if (analysis.strengths.length > 3) {
-            review += `Beyond these standout achievements, ${subjective} has also maintained strong performance across ${analysis.strengths.length - 3} additional metrics, demonstrating ${possessive} comprehensive approach to excellence. `;
+            review += `${topStrengths.slice(0, -1).join(', ')}, and ${topStrengths[topStrengths.length - 1]}, reflecting comprehensive professional competence. `;
         }
     }
     
-    // Custom highlights section
+    // Custom highlights - varied
     if (customHighlights && customHighlights.trim()) {
-        review += `In addition to ${possessive} measured performance metrics, ${firstName} has gone above and beyond expectations in several noteworthy ways. ${customHighlights.trim()} These contributions exemplify ${possessive} dedication and proactive approach to making a meaningful impact. `;
+        const highlightVariations = [
+            `Beyond measured metrics, ${firstName} has distinguished ${objective} through proactive contributions: ${customHighlights.trim()} `,
+            `In addition to quantified performance, ${firstName} has demonstrated initiative and impact by: ${customHighlights.trim()} `,
+            `${firstName} deserves recognition for going above baseline expectations in the following ways: ${customHighlights.trim()} `,
+        ];
+        review += highlightVariations[Math.floor(Math.random() * highlightVariations.length)];
     }
     
-    // Address reliability
+    // Reliability - varied
     const reliabilityIssues = Object.entries(metrics.reliability).filter(([key, value]) => {
         return TARGETS.reliability[key].value !== value;
     });
     
     if (reliabilityIssues.length === 0) {
-        review += `From a reliability and compliance perspective, ${firstName} has maintained impeccable standards throughout the review period, demonstrating zero safety infractions, compliance violations, or security incidents. This exemplary track record reflects ${possessive} strong commitment to organizational policies and best practices, establishing ${objective} as a trusted and dependable team member. `;
+        const reliabilityPhrases = [
+            `From a compliance and reliability standpoint, ${firstName} has maintained an exemplary record with zero infractions across all critical safety and security measures, reflecting consistent adherence to organizational standards. `,
+            `${firstName} has demonstrated impeccable compliance throughout the review period, with a flawless reliability record that establishes ${objective} as a dependable contributor to organizational safety and security. `,
+            `Notably, ${firstName}'s reliability profile is spotless, with no safety infractions, compliance violations, or security concerns—a testament to ${possessive} professional integrity. `,
+        ];
+        review += reliabilityPhrases[Math.floor(Math.random() * reliabilityPhrases.length)];
     } else {
-        review += `Regarding reliability standards, there are some areas requiring focused attention and improvement, specifically related to `;
-        review += reliabilityIssues.map(([key]) => TARGETS.reliability[key].label.toLowerCase()).join(', ');
-        review += `. Addressing these concerns will be important for ${possessive} continued professional development and alignment with organizational expectations. `;
+        review += `Regarding compliance and reliability standards, there are important areas requiring focused improvement. Specifically, ${reliabilityIssues.map(([key]) => TARGETS.reliability[key].label.toLowerCase()).join(', ')} require enhanced attention and corrective action to align with organizational expectations. `;
     }
     
-    // Areas for improvement
+    // Improvements - varied
     if (analysis.improvements.length > 0) {
-        review += `As ${firstName} continues ${possessive} professional journey, there are valuable opportunities for growth and development that will further enhance ${possessive} already strong contributions. Specifically, focusing enhanced attention on `;
+        const improvementOpeners = [
+            `To further enhance ${possessive} professional impact, ${firstName} should prioritize development in the following areas: `,
+            `${firstName} has clear opportunities for professional advancement by focusing concentrated effort on: `,
+            `Strategic areas for skill development and performance enhancement include: `,
+        ];
+        review += improvementOpeners[Math.floor(Math.random() * improvementOpeners.length)];
         
-        const topImprovements = analysis.improvements.slice(0, 3).map(s => {
-            const metricName = s.split(':')[0].toLowerCase();
-            return metricName;
-        });
-        
+        const topImprovements = analysis.improvements.slice(0, 3).map(s => s.split(':')[0].toLowerCase());
         if (topImprovements.length === 1) {
-            review += `${possessive} ${topImprovements[0]} will position ${objective} for even greater success. `;
+            review += `${topImprovements[0]}. `;
         } else if (topImprovements.length === 2) {
-            review += `${possessive} ${topImprovements[0]} and ${topImprovements[1]} will yield significant benefits for both ${possessive} personal development and team performance. `;
+            review += `${topImprovements[0]} and ${topImprovements[1]}. `;
         } else {
-            review += `${possessive} ${topImprovements.slice(0, -1).join(', ')}, and ${topImprovements[topImprovements.length - 1]} will create meaningful advancement in ${possessive} overall performance profile. `;
+            review += `${topImprovements.slice(0, -1).join(', ')}, and ${topImprovements[topImprovements.length - 1]}. `;
         }
-        
-        review += `With targeted effort and the appropriate support and resources, these development areas represent exciting opportunities for ${firstName} to elevate ${possessive} performance to new heights. `;
     }
     
-    // Closing statement
-    if (analysis.strengths.length > analysis.improvements.length) {
-        review += `Looking ahead to the coming year, ${firstName} is exceptionally well-positioned to continue ${possessive} trajectory of outstanding performance, serve as an inspirational role model for colleagues, and take on expanded responsibilities that leverage ${possessive} proven strengths. The organization values ${possessive} contributions and looks forward to ${possessive} continued success and leadership.`;
-    } else if (analysis.improvements.length > analysis.strengths.length) {
-        review += `As we look to the future, ${firstName} has a clear pathway for professional growth that, when combined with ${possessive} existing capabilities and evident dedication, will enable ${objective} to significantly enhance ${possessive} overall performance and make even stronger contributions to team success. With commitment to these development priorities, ${subjective} has tremendous potential for advancement.`;
-    } else {
-        review += `Moving forward into the next performance period, ${firstName} is strongly encouraged to build strategically upon ${possessive} demonstrated strengths while simultaneously addressing identified development areas. This balanced approach will position ${objective} to achieve even greater success, expand ${possessive} impact, and advance ${possessive} professional growth within the organization.`;
-    }
+    // Dynamic closing
+    const closingStatements = {
+        exceptional: [
+            `${firstName} is uniquely positioned to assume expanded responsibilities and continue elevating organizational performance. Leadership looks forward to ${possessive} sustained excellence and the positive influence ${subjective} exerts on team dynamics and culture.`,
+            `As we look forward, ${firstName} represents a valuable asset to the organization whose trajectory of achievement positions ${objective} as both a solid performer and a potential leader. We anticipate continued strong contributions.`,
+            `${firstName}'s demonstrated capabilities and commitment position ${objective} well for increased responsibility and continued professional advancement. The organization values the contributions ${subjective} brings to the team.`,
+        ],
+        strong: [
+            `Moving ahead, ${firstName} should build on demonstrated strengths while addressing identified development areas. This balanced approach will yield meaningful professional growth and enhanced organizational impact.`,
+            `With attention to the development opportunities outlined, ${firstName} has solid potential for progression and expanded contribution. Continued engagement and learning will be key to future success.`,
+            `The coming period offers ${firstName} meaningful opportunities to consolidate strengths and address growth areas. With focused effort, ${subjective} can achieve new levels of professional effectiveness.`,
+        ],
+        developing: [
+            `${firstName}'s success in the coming year will depend on dedicated focus to the development priorities identified. With appropriate support and commitment, there is genuine potential for significant performance improvement.`,
+            `The path forward for ${firstName} centers on prioritizing the development areas outlined and leveraging inherent strengths. Engagement with coaching and feedback will be essential for advancement.`,
+            `${firstName} has the opportunity to substantially enhance ${possessive} professional profile by concentrating effort on identified development priorities. Growth in these areas will unlock expanded career possibilities.`,
+        ]
+    };
+    
+    review += closingStatements[category][Math.floor(Math.random() * closingStatements[category].length)];
     
     return review;
 }
