@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year-End Review Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Year-End Review Generator</h1>
+            <p class="subtitle">Generate comprehensive performance reviews based on metrics</p>
+        </header>
+
+        <main>
+            <form id="reviewForm">
+                <!-- Employee Information -->
+                <section class="form-section">
+                    <h2>Employee Information</h2>
+                    <div class="form-group">
+                        <label for="employeeName">Employee Name:</label>
+                        <input type="text" id="employeeName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pronouns">Pronouns:</label>
+                        <select id="pronouns" required>
+                            <option value="">Select pronouns</option>
+                            <option value="he/him">He/Him</option>
+                            <option value="she/her">She/Her</option>
+                            <option value="they/them">They/Them</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="customHighlights">Custom Highlights & Above and Beyond Achievements:</label>
+                        <textarea id="customHighlights" rows="4" placeholder="Enter any notable achievements, special projects, or above-and-beyond contributions..."></textarea>
+                    </div>
+                </section>
+
+                <!-- Reliability Metrics -->
+                <section class="form-section">
+                    <h2>Reliability Metrics</h2>
+                    <div class="metrics-grid">
+                        <div class="form-group">
+                            <label for="safetyHazards">Emergency Safety Hazard Infractions:</label>
+                            <input type="number" id="safetyHazards" min="0" value="0" required>
+                            <span class="target">Target: 0</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="accComplaints">Substantiated ACC Complaints:</label>
+                            <input type="number" id="accComplaints" min="0" value="0" required>
+                            <span class="target">Target: 0</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="phishingClicks">Clicks on Phishing Emails:</label>
+                            <input type="number" id="phishingClicks" min="0" value="0" required>
+                            <span class="target">Target: 0</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="redFlags">Red Flag Events:</label>
+                            <input type="number" id="redFlags" min="0" value="0" required>
+                            <span class="target">Target: 0</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="depositWaiver">Deposit Waiver Accuracy (%):</label>
+                            <input type="number" id="depositWaiver" min="0" max="100" value="100" required>
+                            <span class="target">Target: 100%</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Driver and Sub-driver Metrics -->
+                <section class="form-section">
+                    <h2>Driver & Sub-driver Metrics</h2>
+                    <div class="metrics-grid">
+                        <div class="form-group">
+                            <label for="scheduleAdherence">Schedule Adherence (%):</label>
+                            <input type="number" id="scheduleAdherence" min="0" max="100" step="0.1" required>
+                            <span class="target">Target: 93%</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="cxRepOverall">CX Rep Overall (%):</label>
+                            <input type="number" id="cxRepOverall" min="0" max="100" step="0.1" required>
+                            <span class="target">Target: 80%</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="fcr">First Call Resolution (%):</label>
+                            <input type="number" id="fcr" min="0" max="100" step="0.1" required>
+                            <span class="target">Target: 70%</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="transfers">Transfers (%):</label>
+                            <input type="number" id="transfers" min="0" max="100" step="0.1" required>
+                            <span class="target">Target: <6%</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="overallSentiment">Overall Sentiment (%):</label>
+                            <input type="number" id="overallSentiment" min="0" max="100" step="0.1" required>
+                            <span class="target">Target: 88%</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="positiveWord">Positive Word Choice (%):</label>
+                            <input type="number" id="positiveWord" min="0" max="100" step="0.1" required>
+                            <span class="target">Target: 86%</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="negativeWord">Negative Word (%):</label>
+                            <input type="number" id="negativeWord" min="0" max="100" step="0.1" required>
+                            <span class="target">Target: 83%</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="managingEmotions">Managing Emotions (%):</label>
+                            <input type="number" id="managingEmotions" min="0" max="100" step="0.1" required>
+                            <span class="target">Target: 95%</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="aht">Average Handle Time (seconds):</label>
+                            <input type="number" id="aht" min="0" step="0.1" required>
+                            <span class="target">Target: <440s</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="acw">ACW (seconds):</label>
+                            <input type="number" id="acw" min="0" step="0.1" required>
+                            <span class="target">Target: <60s</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="holdTime">Hold Time (seconds):</label>
+                            <input type="number" id="holdTime" min="0" step="0.1" required>
+                            <span class="target">Target: <30s</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="reliability">Reliability (hours):</label>
+                            <input type="number" id="reliability" min="0" step="0.1" required>
+                            <span class="target">Target: <16hrs</span>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">Generate Review</button>
+                    <button type="reset" class="btn btn-secondary">Clear Form</button>
+                </div>
+            </form>
+
+            <!-- Results Section -->
+            <section id="resultsSection" class="results-section" style="display: none;">
+                <h2>Generated Review</h2>
+                
+                <div class="metrics-summary">
+                    <h3>Performance Summary</h3>
+                    <div id="strengthsList" class="summary-list"></div>
+                    <div id="improvementsList" class="summary-list"></div>
+                </div>
+
+                <div class="review-output">
+                    <h3>Year-End Review Paragraph</h3>
+                    <div id="reviewText" class="review-text"></div>
+                </div>
+
+                <div class="button-group">
+                    <button id="exportWord" class="btn btn-primary">Export to Word</button>
+                    <button id="copyReview" class="btn btn-secondary">Copy to Clipboard</button>
+                    <button id="newReview" class="btn btn-secondary">Create New Review</button>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Year-End Review Generator &copy; 2026</p>
+        </footer>
+    </div>
+
+    <script src="https://unpkg.com/docx@7.8.2/build/index.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
