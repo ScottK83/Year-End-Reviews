@@ -266,6 +266,11 @@ function generateAIReview(metrics, analysis) {
         review += `Regarding compliance and reliability standards, there are important areas requiring focused improvement. Specifically, ${reliabilityIssues.map(([key]) => TARGETS.reliability[key].label.toLowerCase()).join(', ')} require enhanced attention and corrective action to align with organizational expectations. `;
     }
     
+    // Reliability hours explanation if >= 16
+    if (metrics.drivers.reliability >= 16) {
+        review += `Regarding the ${metrics.drivers.reliability} hours of reliability: these hours represent unplanned and unscheduled time off during the review period. It is critical that ${firstName} utilizes PTOST (Paid Time Off Short Term) to cover the first 40 hours of any unscheduled or unplanned absences. ${subjective.charAt(0).toUpperCase() + subjective.slice(1)} must schedule this time in Verint ahead of any absence whenever possible. Failure to properly schedule and utilize PTOST for unplanned time will result in disciplinary action per company policy. `;
+    }
+    
     // Improvements - varied
     if (analysis.improvements.length > 0) {
         const improvementOpeners = [
